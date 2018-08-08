@@ -4,6 +4,15 @@ spring:
 
   testValue: "local"
 
+  data:
+    mongodb:
+      host: 52.79.212.166
+      database: mongo_test
+      port: 27017
+      username: bbk
+      password: qudrhksdev10!
+      authentication-database: admin
+
 ---
 spring:
   profiles: dev
