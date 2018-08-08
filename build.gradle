@@ -23,8 +23,29 @@ repositories {
     mavenCentral()
 }
 
-
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.0.4.RELEASE'
+
+    compile "org.projectlombok:lombok:1.16.20"
+    compile 'com.google.code.gson:gson:2.8.5'
+
+    // https://mvnrepository.com/artifact/de.codecentric/spring-boot-admin-starter-server
+    //compile group: 'de.codecentric', name: 'spring-boot-admin-starter-client', version: '2.0.2'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+    compile('org.springframework.boot:spring-boot-starter-validation')
+
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-webflux')
+
+    compile('de.codecentric:spring-boot-admin-starter-client')
+
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
