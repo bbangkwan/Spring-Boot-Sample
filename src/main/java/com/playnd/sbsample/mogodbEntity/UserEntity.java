@@ -2,7 +2,9 @@ package com.playnd.sbsample.mogodbEntity;
 
 import lombok.Builder;
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,11 +15,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Document(collection = "user")
 public class UserEntity {
-    //@Id
-    //private String _id;
-    
     @Id
+    private String _id;
+    
+    @Indexed(name = "id", unique = true)
     private String id;
     private String type;
     private int age;
+    private Object test;
 }

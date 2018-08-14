@@ -11,4 +11,5 @@ import org.springframework.data.mongodb.repository.Query;
 public interface MdTestRepository extends MongoRepository<UserEntity, String>{
     //insert : 말그대로 insert.
     //save : 해당 id의 row가 존재하면 update, 없으면 insert
+    
 }

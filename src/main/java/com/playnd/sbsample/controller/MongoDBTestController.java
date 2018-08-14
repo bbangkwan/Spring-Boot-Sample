@@ -1,19 +1,22 @@
 package com.playnd.sbsample.controller;
 
 
+import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.MongoCommandException;
 import com.mongodb.MongoException;
 import com.mongodb.MongoWriteException;
+import com.playnd.sbsample.model.user.User;
 import com.playnd.sbsample.model.user.param.UserParam;
 import com.playnd.sbsample.mogodbEntity.UserEntity;
 import com.playnd.sbsample.service.MongoDBTestService;
 import lombok.extern.slf4j.Slf4j;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
+import java.awt.print.Pageable;
 import java.util.List;
 
 /**
@@ -26,22 +29,65 @@ public class MongoDBTestController {
     @Autowired
     MongoDBTestService mongoDBTestService;
     
-    @PostMapping(value = "/getData")
-    public List<UserEntity> getMongoDB(){
+    @GetMapping(value = "/getDataList")
+    public List<UserEntity> getDataList(){
         List<UserEntity> testList = mongoDBTestService.getUserList();
+        
+        for(UserEntity temp : testList){
+            log.info("==========================================================");
+            log.info("objectId : "+temp.get_id());
+            log.info("toString : "+temp.get_id().toString());
+            /*log.info("toString : "+temp.get_id().toString());
+            log.info("getDate : "+temp.get_id().getDate());
+            log.info("getCounter : "+temp.get_id().getCounter());
+            log.info("getTimestamp : "+temp.get_id().getTimestamp());
+            log.info("getMachineIdentifier : "+temp.get_id().getMachineIdentifier());
+            log.info("getProcessIdentifier : "+temp.get_id().getProcessIdentifier());
+            
+            log.info(""+temp.get_id().toByteArray());*/
+        }
         
         return testList;
     }
     
-    @PostMapping(value = "/saveUserData")
-    public UserEntity saveUserData(@RequestBody UserParam userParam){
-        UserEntity.UserEntityBuilder userBuilder = UserEntity.builder();
-        userBuilder.id(userParam.getId())
-        .type(userParam.getType()).age(userParam.getAge());
-    
-        UserEntity resultUser = mongoDBTestService.saveUser(userBuilder.build());
+    @GetMapping(value = "/getDataListPaging")
+    public void getDataPaging(){
+        PageRequest pageRequest = PageRequest.of(1, 10);
+        Page<UserEntity> userListPage = mongoDBTestService.getDataPaging(pageRequest);
         
-        return resultUser;
+        log.info("getTotalElements : "+userListPage.getTotalElements());
+        log.info("getTotalPages : "+userListPage.getTotalPages());
+        log.info("getContent : "+userListPage.getContent());
+        log.info("getNumber : "+userListPage.getNumber());
+        log.info("getNumberOfElements : "+userListPage.getNumberOfElements());
+        log.info("getPageable : "+userListPage.getPageable());
+        log.info("getSize : "+userListPage.getSize());
+        log.info("getSort : "+userListPage.getSort());
+        
+        log.info("toString : "+userListPage.toString());
+        
+        while(userListPage.hasNext()){
+            log.info("test!!!");
+        }
+        
+        for(UserEntity temp : userListPage){
+            log.info(temp.toString());
+        }
+    }
+    
+    @GetMapping(value = "/getData")
+    public void getData(){
+    
+    }
+    
+    @GetMapping(value = "getDataDetail")
+    public void getDataDetail(){
+    
+    }
+    
+    @GetMapping(value = "/searchData")
+    public void searchData(){
+    
     }
     
     @PostMapping(value = "/insertUserData")
@@ -53,14 +99,33 @@ public class MongoDBTestController {
         UserEntity resultUser = null;
         try{
             resultUser = mongoDBTestService.insertUser(userBuilder.build());   
-        } catch (Exception mwe){
+        }catch (MongoWriteException mw){
+            log.error("write exception!!!!");
+        }
+        catch (Exception mwe){
             log.error("insert error!!!!");
         }
     
         return resultUser;
     }
     
-    @PostMapping(value = "/deleteUserData")
+    @PutMapping(value = "/saveUserData")
+    public UserEntity saveUserData(@RequestBody UserParam userParam){
+        UserEntity.UserEntityBuilder userBuilder = UserEntity.builder();
+        
+        User user = new User();
+        user.setName("test");
+        
+        userBuilder.id(userParam.getId())
+                .age(10)
+                .type(userParam.getType()).test(user);
+        
+        UserEntity resultUser = mongoDBTestService.saveUser(userBuilder.build());
+        
+        return resultUser;
+    }
+    
+    @DeleteMapping(value = "/deleteUserData")
     public String deleteUserData(@RequestBody UserParam userParam) {
         UserEntity.UserEntityBuilder userBuilder = UserEntity.builder();
         userBuilder.id(userParam.getId())

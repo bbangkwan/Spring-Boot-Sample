@@ -1,5 +1,6 @@
 package com.playnd.sbsample.service.impl;
 
+import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 import com.mongodb.MongoWriteException;
 import com.playnd.sbsample.mogodbEntity.UserEntity;
@@ -7,6 +8,11 @@ import com.playnd.sbsample.repository.MdTestRepository;
 import com.playnd.sbsample.service.MongoDBTestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -26,6 +32,13 @@ public class MongoDBTestServiceImpl implements MongoDBTestService {
         log.info("testList toString : "+testList.toString());
         
         return testList;
+    }
+    
+    @Override
+    public Page<UserEntity> getDataPaging(Pageable pageable) {
+        Page<UserEntity> pageList = mdTestRepository.findAll(pageable);
+        
+        return pageList;
     }
     
     /**
@@ -54,6 +67,8 @@ public class MongoDBTestServiceImpl implements MongoDBTestService {
             user = mdTestRepository.insert(mUser);
         }catch(Exception e){
             e.printStackTrace();
+            log.info(e.getMessage());
+            log.info(e.hashCode()+"");
             log.error("error@!!!!!!!");
         }
     
@@ -65,6 +80,7 @@ public class MongoDBTestServiceImpl implements MongoDBTestService {
     @Override
     public void deleteUser(UserEntity mUser) {
         //mdTestRepository.delete(mUser);
+        
         mdTestRepository.deleteById(mUser.getId());
     }
 }
