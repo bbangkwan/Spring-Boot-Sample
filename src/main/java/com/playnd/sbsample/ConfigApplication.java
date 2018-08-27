@@ -1,9 +1,15 @@
 package com.playnd.sbsample;
 
+import com.mongodb.MongoClient;
 import com.playnd.sbsample.util.SwaggerConfig;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -12,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
  */
 @Configuration
 @ComponentScan
+@EnableMongoRepositories
 @Import(SwaggerConfig.class)
 public class ConfigApplication extends WebMvcConfigurationSupport {
     @Override
@@ -22,6 +29,4 @@ public class ConfigApplication extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
-    
-    
 }

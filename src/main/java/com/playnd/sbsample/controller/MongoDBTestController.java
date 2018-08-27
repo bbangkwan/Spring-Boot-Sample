@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.MongoCommandException;
 import com.mongodb.MongoException;
 import com.mongodb.MongoWriteException;
+import com.playnd.sbsample.model.test.TestModel;
 import com.playnd.sbsample.model.user.User;
 import com.playnd.sbsample.model.user.param.UserParam;
 import com.playnd.sbsample.mogodbEntity.UserEntity;
@@ -17,6 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import java.awt.print.Pageable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,13 +80,18 @@ public class MongoDBTestController {
     }
     
     @GetMapping(value = "/getData")
-    public void getData(){
-    
+    public UserEntity getData(@RequestParam(value = "userId") String userId){
+        log.info(userId);
+        UserEntity userEntity = mongoDBTestService.getUserData(userId);
+        
+        return userEntity;
     }
     
     @GetMapping(value = "getDataDetail")
-    public void getDataDetail(){
-    
+    public TestModel getDataDetail(@RequestParam(value = "id") String id){
+        TestModel detail = mongoDBTestService.getUserDetail(id);
+        
+        return detail;
     }
     
     @GetMapping(value = "/searchData")
@@ -93,8 +102,20 @@ public class MongoDBTestController {
     @PostMapping(value = "/insertUserData")
     public UserEntity insertUserData(@RequestBody UserParam userParam) {
         UserEntity.UserEntityBuilder userBuilder = UserEntity.builder();
+        
+        /*ObjectId objectId = new ObjectId();
+        log.info(objectId.toString());
+        userParam.getDetail().setId(objectId);*/
+        
+        TestModel userDetail = mongoDBTestService.insertUserDetail(userParam.getDetail());
+        
+        List<TestModel> testModelList = new ArrayList<>();
+        testModelList.add(userDetail);
+    
+        Date date = Calendar.getInstance().getTime();
+        
         userBuilder.id(userParam.getId())
-                .type(userParam.getType()).age(userParam.getAge());
+                .type(userParam.getType()).age(userParam.getAge()).detail(testModelList).temp(date);
     
         UserEntity resultUser = null;
         try{
@@ -112,13 +133,15 @@ public class MongoDBTestController {
     @PutMapping(value = "/saveUserData")
     public UserEntity saveUserData(@RequestBody UserParam userParam){
         UserEntity.UserEntityBuilder userBuilder = UserEntity.builder();
-        
-        User user = new User();
-        user.setName("test");
+    
+        List<TestModel> testModelList = new ArrayList<>();
+        testModelList.add(userParam.getDetail());
+    
+        Date date = Calendar.getInstance().getTime();
         
         userBuilder.id(userParam.getId())
                 .age(10)
-                .type(userParam.getType()).test(user);
+                .type(userParam.getType()).detail(testModelList).temp(date);
         
         UserEntity resultUser = mongoDBTestService.saveUser(userBuilder.build());
         
