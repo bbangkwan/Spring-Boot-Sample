@@ -1,5 +1,6 @@
 package com.playnd.sbsample.model.user.param;
 
+import com.playnd.sbsample.model.test.TestModel;
 import lombok.Data;
 
 /**
@@ -11,4 +12,6 @@ public class UserParam {
     private String id;
     private String type;
     private int age;
+    
+    private TestModel detail;
 }
