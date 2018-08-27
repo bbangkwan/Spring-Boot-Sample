@@ -33,6 +33,7 @@ public class MainController {
     
         Gson tsetGson = new Gson();
     
+        //TestModel testModel = new TestModel("bbk", 10, "live");
         TestModel testModel = new TestModel();
         testModel.setAge(10);
         testModel.setName("bbk");
@@ -56,6 +57,7 @@ public class MainController {
         
         Gson testGson = new Gson();
     
+        //TestModel testModel = new TestModel("bbk", 10, "live");
         TestModel testModel = new TestModel();
         testModel.setAge(10);
         testModel.setName("bbk");
