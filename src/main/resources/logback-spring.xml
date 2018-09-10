@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!-- 변수 지정 -->
+    <property name="LOG_DIR" value="/apps/sbsample/log" />
+    <!--property name="LOG_DIR" value="D:/bbk_dev_project/log/test_log/doobuckyi_log" /-->
+    <property name="LOG_PATH_NAME" value="${LOG_DIR}/sbsample.log" />
+
+    <!--console 출력 설정-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
@@ -7,7 +13,37 @@
         </encoder>
     </appender>
 
-    <root level="debug">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+    <appender name="CONSOLE_TEST" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%thread] %-3level %logger{5} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_NAME}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-4relative --- [%thread{10}] %logger{36}.%M\(%line\) : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 개발 환경에 따라 다른 log 출력 설정을 할 수 있다. -->
+
+    <springProfile name="local">
+        <root level="info">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FileAppender"/>
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+        <root level="debug">
+            <appender-ref ref="CONSOLE_TEST"/>
+        </root>
+    </springProfile>
 </configuration>
