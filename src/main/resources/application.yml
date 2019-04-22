@@ -6,11 +6,11 @@ spring:
 
   data:
     mongodb:
-      host: 52.79.212.166
-      database: mongo_test
-      port: 27017
-      username: bbk
-      password: qudrhksdev10!
+      host: 
+      database: 
+      port: 
+      username: 
+      password: 
       authentication-database: admin
 
   boot:
